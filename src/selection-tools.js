@@ -8,7 +8,7 @@ import { gettext as _ } from 'gettext'
 import * as utils from './utils.js'
 import { WebView } from './webview.js'
 import { locales, matchLocales } from './format.js'
-
+import { gen_hunter_tool } from "./selection-tool/hunter/hunter.js";
 const getLanguage = lang => {
     try {
         return new Intl.Locale(lang).language
@@ -68,6 +68,7 @@ footer {
 `
 
 const tools = {
+    "hunter": gen_hunter_tool(),
     'dictionary': {
         label: _('Dictionary'),
         run: ({ text, lang }) => {

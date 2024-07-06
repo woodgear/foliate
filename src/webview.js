@@ -2,6 +2,7 @@ import GObject from 'gi://GObject'
 import GLib from 'gi://GLib'
 import Gio from 'gi://Gio'
 import WebKit from 'gi://WebKit'
+import { handle_events, reg_events } from "./selection-tool/hunter/hunter.js";
 
 const registerScheme = (name, callback) =>
     WebKit.WebContext.get_default().register_uri_scheme(name, req => {
@@ -69,6 +70,16 @@ export const WebView = GObject.registerClass({
     #handler = makeHandlerStr(this.#handlerName)
     constructor(params) {
         super(params)
+        this.registerHandler("event", ({ type, payload }) => {
+            console.log("in handle event", type, payload)
+            const event_map = {}
+            for (const name of reg_events()) {
+                event_map[name] = handle_events
+            }
+            if (event_map[type]) {
+                event_map[type](type, payload)
+            }
+        })
         this.registerHandler(this.#handlerName, ({ token, ok, payload }) =>
             this.#promises.resolve(token, ok, payload))
 

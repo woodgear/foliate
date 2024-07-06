@@ -849,7 +849,16 @@ export const BookViewer = GObject.registerClass({
             utils.connect(popover, {
                 'show-popover': (_, popover) =>
                     this._view.showPopover(popover, point, dir),
-                'run-tool': () => ({ text, lang }),
+                'run-tool': () => {
+                    const location = this.#data.storage.get('progress')
+                    const cfi = value
+                    const meta = {
+                        title: this.#book.metadata.title,
+                        location: location,
+                        cfg: cfi
+                    }
+                    return { text, lang, meta }
+                },
                 // it seems `closed` is emitted before the actions are run
                 // so it needs the timeout
                 'closed': () => setTimeout(() => resolved ? null : resolve(), 0),
