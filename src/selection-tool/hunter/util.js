@@ -1,7 +1,16 @@
 import Gio from 'gi://Gio'
 import GLib from 'gi://GLib'
-import { readJSONFile as _readJSONFile } from "../../utils.js";
-export const readJSONFile = _readJSONFile
+
+export const readJSONFile = function (path) {
+    const decoder = new TextDecoder()
+    const file = Gio.File.new_for_path(path)
+    const [success, data/*, tag*/] = file.load_contents(null)
+    if (!success) {
+        throw new Error(`Failed to read file: ${path}`)
+    }
+    return JSON.parse(decoder.decode(data))
+}
+
 export const getEnv = function (name) {
     return GLib.getenv(name)
 }

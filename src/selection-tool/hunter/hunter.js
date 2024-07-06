@@ -11,8 +11,8 @@ export const handle_events = function (name, payload) {
     }
 }
 export const hunter = function (payload) {
-    console.log("------> hunter", getEnv("FOLIATE_ENG"))
     const eng_file = getEnv("FOLIATE_ENG")
+    console.log("------> hunter", eng_file)
     const eng = readJSONFile(eng_file)
     if (!!!eng["word"]) {
         eng["word"] = []
@@ -24,9 +24,9 @@ export const hunter = function (payload) {
     if (selected.length == 0) {
         return
     }
-    console.log("------> hunter", selected, sentence)
     eng["word"] = eng["word"].concat(payload["selected"])
-    eng["sentence"].push(payload["sentence"])
+    eng["sentence"].push(sentence)
+    console.log("------> hunter", eng["word"].length, eng["sentence"].length)
     writeJSONFile(eng_file, eng)
 }
 function clean_text(input) {
